@@ -294,8 +294,60 @@ const navLinks = [...document.querySelectorAll('.header nav a')];
 const navSections = navLinks.map(link => document.querySelector(link.hash));
 let pendingFrame;
 
+const film = document.querySelector('.film');
+const filmFrames = [...film.querySelectorAll('.film-frames img')];
+const filmCopy = [...film.querySelectorAll('.film-copy')];
+const chapterButtons = [...film.querySelectorAll('.film-chapters button')];
+let activeChapter = 0;
+
+film.querySelectorAll('button[data-chapter]').forEach(button => {
+  button.addEventListener('click', () => {
+    const distance = film.offsetHeight - film.querySelector('.film-screen').offsetHeight;
+    window.scrollTo({
+      top: film.offsetTop + distance * Number(button.dataset.chapter) / (filmFrames.length - 1),
+      behavior: reducedMotion.matches ? 'instant' : 'smooth',
+    });
+  });
+});
+
+function renderFilm() {
+  const bounds = film.getBoundingClientRect();
+  if (bounds.bottom < 0) return;
+  const distance = Math.max(1, bounds.height - film.querySelector('.film-screen').offsetHeight);
+  const progress = Math.max(0, Math.min(1, -bounds.top / distance));
+  const position = progress * (filmFrames.length - 1);
+  const chapter = Math.round(position);
+  film.style.setProperty('--film-progress', progress);
+
+  filmFrames.forEach((frame, i) => {
+    const offset = position - i;
+    const opacity = Math.max(0, 1 - Math.abs(offset));
+    frame.style.opacity = reducedMotion.matches ? Number(i === chapter) : opacity;
+    frame.style.transform = reducedMotion.matches ? 'none'
+      : 'translateX(' + Math.max(-2, Math.min(2, offset * -2)) + '%) scale(' + (1.04 + Math.min(1, Math.abs(offset)) * .09) + ')';
+  });
+
+  if (chapter !== activeChapter) {
+    activeChapter = chapter;
+    filmCopy.forEach((copy, i) => { copy.hidden = i !== chapter; });
+    chapterButtons.forEach((button, i) => {
+      if (i === chapter) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+    });
+  }
+  if (!reducedMotion.matches) {
+    const positionInChapter = position - chapter;
+    filmCopy[chapter].style.transform = 'translateY(' + positionInChapter * -40 + 'px)';
+    filmCopy[chapter].style.opacity = 1 - Math.abs(positionInChapter) * .6;
+  } else {
+    filmCopy[chapter].style.removeProperty('transform');
+    filmCopy[chapter].style.removeProperty('opacity');
+  }
+}
+
 function renderScroll() {
   pendingFrame = null;
+  renderFilm();
   const scene = experience.getBoundingClientRect();
   const details = specs.getBoundingClientRect();
   const reveal = Math.min(1, Math.max(0, (innerHeight * .74 - details.top) / (innerHeight * .9)));

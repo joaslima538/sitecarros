@@ -13,13 +13,60 @@
   <header class="header shell">
     <a class="logo" href="#inicio" aria-label="Overdrive, início"><i aria-hidden="true"></i>OVERDRIVE<sup>®</sup></a>
     <nav aria-label="Navegação principal">
-      <a class="active" href="#inicio">Início</a><a href="#garagem">Garagem</a><a href="#experiencia">Experiência</a>
+      <a class="active" href="#inicio">Início</a><a href="#modelos">Garagem</a><a href="#experiencia">Experiência</a>
     </nav>
-    <a class="header-cta" href="#garagem">Explorar garagem <span aria-hidden="true">↗</span></a>
+    <a class="header-cta" href="#modelos">Explorar garagem <span aria-hidden="true">↗</span></a>
   </header>
 
   <main>
-    <section id="inicio" class="hero" aria-label="Carrossel de carros em destaque" aria-roledescription="carrossel">
+    <section id="inicio" class="film" aria-label="Apresentação cinematográfica do Nissan GT-R">
+      <div class="film-screen">
+        <div class="film-frames" aria-hidden="true">
+          <img src="assets/film-entrance.webp" alt="" fetchpriority="high">
+          <img src="assets/film-cabin.webp" alt="">
+          <img src="assets/film-engineering.webp" alt="">
+          <img src="assets/film-tunnel.webp" alt="">
+        </div>
+        <div class="film-light" aria-hidden="true"></div>
+        <div class="film-vignette" aria-hidden="true"></div>
+        <div class="film-content shell">
+          <article class="film-copy">
+            <p class="eyebrow"><span></span> NISSAN GT-R R35</p>
+            <h1>A NOITE <br>É <em>NOSSA.</em></h1>
+            <p>O Godzilla de Yokohama entra em cena.</p>
+            <button type="button" class="film-action" data-chapter="1">Começar experiência <span aria-hidden="true">↓</span></button>
+          </article>
+          <article class="film-copy" hidden>
+            <p class="eyebrow"><span></span> CABINE</p>
+            <h2>PORTAS <br><em>ABERTAS.</em></h2>
+            <p>Bancos concha, cockpit baixo e tudo voltado para quem dirige.</p>
+          </article>
+          <article class="film-copy" hidden>
+            <p class="eyebrow"><span></span> ENGENHARIA</p>
+            <h2>O CORAÇÃO <br><em>DO GT-R.</em></h2>
+            <dl class="film-specs"><div><dt>Motor</dt><dd>3.8 V6</dd></div><div><dt>Sobrealimentação</dt><dd>Biturbo</dd></div><div><dt>Tração</dt><dd>Integral</dd></div></dl>
+          </article>
+          <article class="film-copy" hidden>
+            <p class="eyebrow"><span></span> NA PISTA</p>
+            <h2>RESPIRA. <br><em>ACELERA.</em></h2>
+            <p>Depois do GT-R, explore o Supra MK4 e o RX-7 FD na garagem.</p>
+            <a class="film-action" href="#modelos">Escolher um carro <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+        <div class="film-controls shell">
+          <p class="film-scroll">Role para avançar <span aria-hidden="true">↓</span></p>
+          <div class="film-chapters" role="group" aria-label="Capítulos da apresentação">
+            <button type="button" data-chapter="0" aria-current="step">Chegada</button>
+            <button type="button" data-chapter="1">Cabine</button>
+            <button type="button" data-chapter="2">Motor</button>
+            <button type="button" data-chapter="3">Pista</button>
+          </div>
+        </div>
+        <div class="film-progress" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section id="modelos" class="hero" aria-label="Carrossel de carros em destaque" aria-roledescription="carrossel">
       <div class="hero-media" aria-hidden="true">
         <div class="garage-backdrop"></div>
         <div class="garage-light"></div>
@@ -35,7 +82,7 @@
       <div class="hero-content shell">
         <div class="hero-copy" aria-live="polite">
           <p class="eyebrow"><span></span> CULTURA JDM <b>//</b> <span id="hero-tag">GODZILLA</span></p>
-          <h1><span id="hero-make">NISSAN</span><strong id="hero-model">GT-R R35</strong></h1>
+          <h2 class="hero-heading"><span id="hero-make">NISSAN</span><strong id="hero-model">GT-R R35</strong></h2>
           <p id="hero-description" class="description">O monstro de Yokohama. Um V6 biturbo, tração integral e presença suficiente para dominar qualquer rua.</p>
         </div>
         <a class="button" id="hero-link" href="#ficha">Conhecer o carro <span aria-hidden="true">↗</span></a>
@@ -95,9 +142,9 @@
         <p>Três ícones japoneses que fizeram história nas pistas e nas ruas.</p>
       </div>
       <div class="cards">
-        <a id="nissan" class="card" data-car="0" href="#inicio"><img src="assets/gtr.webp" alt="Nissan GT-R prata em garagem iluminada em vermelho" loading="lazy"><div class="card-caption"><div><p>NISSAN</p><h3>GT-R R35</h3></div><span aria-hidden="true">↗</span></div></a>
-        <a id="toyota" class="card" data-car="1" href="#inicio"><img src="assets/supra.webp" alt="Toyota Supra laranja em garagem industrial" loading="lazy"><div class="card-caption"><div><p>TOYOTA</p><h3>SUPRA MK4</h3></div><span aria-hidden="true">↗</span></div></a>
-        <a id="mazda" class="card" data-car="2" href="#inicio"><img src="assets/rx7.webp" alt="Mazda RX-7 azul sob luzes fluorescentes" loading="lazy"><div class="card-caption"><div><p>MAZDA</p><h3>RX-7 FD</h3></div><span aria-hidden="true">↗</span></div></a>
+        <a id="nissan" class="card" data-car="0" href="#modelos"><img src="assets/gtr.webp" alt="Nissan GT-R prata em garagem iluminada em vermelho" loading="lazy"><div class="card-caption"><div><p>NISSAN</p><h3>GT-R R35</h3></div><span aria-hidden="true">↗</span></div></a>
+        <a id="toyota" class="card" data-car="1" href="#modelos"><img src="assets/supra.webp" alt="Toyota Supra laranja em garagem industrial" loading="lazy"><div class="card-caption"><div><p>TOYOTA</p><h3>SUPRA MK4</h3></div><span aria-hidden="true">↗</span></div></a>
+        <a id="mazda" class="card" data-car="2" href="#modelos"><img src="assets/rx7.webp" alt="Mazda RX-7 azul sob luzes fluorescentes" loading="lazy"><div class="card-caption"><div><p>MAZDA</p><h3>RX-7 FD</h3></div><span aria-hidden="true">↗</span></div></a>
       </div>
     </section>
 

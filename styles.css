@@ -76,15 +76,15 @@ h1, h2, h3, p { margin: 0; }
 .hero-content { position: relative; padding-top: 115px; pointer-events: none; }
 .hero-content a { pointer-events: auto; }
 .hero .description { max-width: 245px; text-shadow: 0 1px 8px #000; }
-.hero h1 strong, .drag-label span { color: rgb(var(--garage-rgb)); }
-.hero h1 { font-size: clamp(52px, 5.8vw, 91px); margin-bottom: 15px; }
+.hero .hero-heading strong, .drag-label span { color: rgb(var(--garage-rgb)); }
+.hero .hero-heading { font-size: clamp(52px, 5.8vw, 91px); margin-bottom: 15px; }
 .hero .button { margin-top: 13px; }
 .eyebrow { display: flex; gap: 10px; align-items: center; color: var(--red); font-size: 11px; letter-spacing: .17em; font-weight: 600; }
 .eyebrow > span:first-child { width: 22px; height: 2px; background: var(--red); }
 .eyebrow b { color: #b98384; font-weight: 400; }
-h1 { margin: 15px 0 23px; font: italic 900 clamp(82px, 9.6vw, 174px)/.77 var(--display); letter-spacing: -.035em; }
-h1 span, h1 strong { display: block; }
-h1 strong { color: var(--red); font-weight: 900; }
+.hero-heading { margin: 15px 0 23px; font: italic 900 clamp(82px, 9.6vw, 174px)/.77 var(--display); letter-spacing: -.035em; }
+.hero-heading span, .hero-heading strong { display: block; }
+.hero-heading strong { color: var(--red); font-weight: 900; }
 .description { max-width: 355px; color: #ddd8db; font-size: 13px; line-height: 1.75; }
 .button { display: inline-flex; gap: 25px; align-items: center; margin-top: 24px; padding: 13px 17px; background: var(--red); color: #12090a; transition: background .2s, transform .2s; }
 .button:hover { background: #fff; transform: translateY(-3px); }
@@ -153,7 +153,7 @@ h2 em { color: var(--red); }
   .logo i { width: 17px; height: 12px; }
   .hero { min-height: 660px; height: 94svh; }
   .hero-content { padding-top: 88px; }
-  .hero h1 { font-size: clamp(45px, 13vw, 68px); margin-bottom: 0; }
+  .hero .hero-heading { font-size: clamp(45px, 13vw, 68px); margin-bottom: 0; }
   .hero .description, .hero .button { display: none; }
   .garage-stage { width: 97vw; bottom: 28%; }
   .garage-backdrop { background-position: 63% 54%; }
@@ -389,4 +389,91 @@ h2 em { color: var(--red); }
 
 @media (min-width: 541px) and (max-width: 800px) {
   .garage-stage { width: 78vw; left: 56%; bottom: 19%; }
+}
+
+.header { position: fixed; }
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc((100vw - 100%) / -2) -1px;
+  z-index: -1;
+  background: #07090ed9;
+  backdrop-filter: blur(12px);
+}
+.film {
+  --film-accent: #5684ff;
+  --film-progress: 0;
+  height: 440svh;
+  background: #07090e;
+}
+.film-screen { position: sticky; top: 0; height: 100svh; overflow: hidden; isolation: isolate; background: #07090e; }
+.film-frames, .film-frames img, .film-light, .film-vignette { position: absolute; inset: 0; width: 100%; height: 100%; }
+.film-frames img { opacity: 0; object-fit: cover; object-position: 59% 55%; transform: scale(1.03); }
+.film-frames img:first-child { opacity: 1; }
+.film-frames img:first-child { filter: saturate(.52); }
+.film-vignette { background: linear-gradient(90deg,#06080df7,#06080dbd 24%,#06080d25 62%,transparent 78%),linear-gradient(0deg,#06080df5,transparent 26%,transparent 76%,#06080d70); }
+.film-light {
+  pointer-events: none;
+  opacity: .65;
+  background: radial-gradient(ellipse at 72% 54%, #3465ff58, transparent 53%);
+  mix-blend-mode: screen;
+}
+.film-content { position: absolute; inset: 0 0 7%; display: grid; align-items: center; pointer-events: none; }
+.film-copy { max-width: 490px; padding-top: 66px; }
+.film-copy .eyebrow { color: #9eb7ff; }
+.film-copy .eyebrow span { background: currentColor; }
+.film-copy h1, .film-copy h2 {
+  margin: 16px 0 20px;
+  font: italic 900 clamp(67px, 9.3vw, 156px)/.79 var(--display);
+  letter-spacing: -.022em;
+}
+.film-copy em { color: var(--film-accent); }
+.film-copy > p:not(.eyebrow) { max-width: 330px; color: #e0e3ec; font-size: 13px; line-height: 1.7; }
+.film-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 21px;
+  padding: 13px 16px;
+  border: 1px solid #7398ff;
+  background: #315be1;
+  color: #fff;
+  font: 600 11px var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  pointer-events: auto;
+}
+.film-action:hover { background: #234cc8; }
+.film-specs { display: flex; gap: 24px; margin: 28px 0 0; }
+.film-specs div { border-top: 1px solid #688fff90; padding: 9px 0 0; }
+.film-specs dt { font-size: 9px; text-transform: uppercase; color: #c8d2e9; }
+.film-specs dd { margin: 4px 0 0; font: italic 800 30px/1 var(--display); }
+.film-controls { position: absolute; inset: auto 0 27px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.film-scroll, .film-chapters button { font: 600 10px var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+.film-scroll { color: #dde2ee; }
+.film-scroll span { margin-left: 8px; color: var(--film-accent); }
+.film-chapters { display: flex; gap: 7px; }
+.film-chapters button { padding: 9px 11px; border: 1px solid #ffffff38; background: #080a10ad; color: #e5e8f0; }
+.film-chapters button[aria-current] { border-color: var(--film-accent); background: #1a2d61; }
+.film-progress { position: absolute; inset: auto 0 0; height: 3px; background: var(--film-accent); transform: scaleX(var(--film-progress)); transform-origin: left; }
+#garagem { scroll-margin-top: 75px; }
+
+@media (max-width: 540px) {
+  .film-frames img { object-position: 64% 49%; }
+  .film-vignette { background: linear-gradient(0deg,#06080dfc,#06080dc9 29%,#06080d20 66%,#06080d4f 88%); }
+  .film-content { align-items: end; bottom: 99px; }
+  .film-copy h1, .film-copy h2 { font-size: clamp(54px, 15vw, 84px); margin-bottom: 14px; }
+  .film-copy > p:not(.eyebrow) { font-size: 12px; }
+  .film-controls { display: grid; gap: 7px; bottom: 17px; }
+  .film-chapters button { padding: 7px 9px; font-size: 9px; }
+  .film-specs { gap: 13px; margin: 18px 0 0; }
+  .film-specs dd { font-size: 23px; }
+}
+
+.film-frames img:first-child { animation: film-reveal 1.65s ease-out both; }
+@keyframes film-reveal {
+  0% { filter: brightness(.14) saturate(.45); }
+  30% { filter: brightness(.34) saturate(.58); }
+  48% { filter: brightness(1.17) saturate(.85); }
+  100% { filter: brightness(1) saturate(.86); }
 }

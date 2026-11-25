@@ -14,7 +14,7 @@ Abra `http://localhost:4173` no navegador. Escolha um modelo pelas miniaturas, p
 
 O site usa HTML, CSS e JavaScript sem dependências de instalação.
 
-A garagem usa modelos 3D estilizados e uma trajetória no plano do piso. Em navegadores sem WebGL, a cena usa as imagens dos carros.
+A chegada animada usa imagens detalhadas dos carros e roda no navegador sem depender de WebGL.
 
 ## Publicar no Render
 

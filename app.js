@@ -85,11 +85,8 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const dots = [...hero.querySelectorAll('.pagination button')];
 let current = 0;
 let hasSelected = false;
-let showGarage;
-const garageReady = import('./garage-3d.js').then(({ createGarage }) => {
-  showGarage = createGarage(hero.querySelector('.hero-media'));
-  if (hasSelected) animateArrival(slides[current], slides[current]);
-}).catch(() => {});
+let activeArrival;
+const arrivalBar = hero.querySelector('.arrival-progress');
 
 function rollWheels(car, frames, timing) {
   car.querySelectorAll('.garage-wheel img').forEach(rim => {
@@ -100,19 +97,21 @@ function rollWheels(car, frames, timing) {
   });
 }
 
-function animateArrival(previous, next) {
+function animateArrival(previous, next, { selected = false } = {}) {
   const previousPose = getComputedStyle(previous).transform;
   for (const slide of [...slides, ...profiles]) {
     slide.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
     slide.classList.remove('in-transit');
   }
-  for (const layer of [garageLight, backdrop, beam]) {
+  for (const layer of [garageLight, backdrop, beam, arrivalBar]) {
     layer.getAnimations().forEach(animation => animation.cancel());
   }
-  if (showGarage?.(slides.indexOf(next), !reducedMotion.matches)) return;
-  if (reducedMotion.matches) return;
+  hero.classList.remove('arriving');
+  if (reducedMotion.matches && !selected) return;
+  const gentle = reducedMotion.matches;
+  hero.classList.add('arriving');
 
-  if (previous !== next) {
+  if (previous !== next && !gentle) {
     previous.classList.add('in-transit');
     const timing = { duration: 600, easing: 'cubic-bezier(.55,.05,.83,.45)' };
     const exit = previous.animate([
@@ -123,16 +122,19 @@ function animateArrival(previous, next) {
     exit.addEventListener('finish', () => previous.classList.remove('in-transit'));
   }
 
-  const delay = previous === next ? 0 : 320;
-  const timing = { duration: 3050, delay, fill: 'backwards' };
+  const delay = previous === next || gentle ? 0 : 220;
+  const timing = { duration: gentle ? 950 : 3450, delay, fill: 'backwards' };
+  arrivalBar.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], {
+    ...timing, fill: 'both',
+  });
   const profile = profiles[slides.indexOf(next)];
   profile.classList.add('in-transit');
   const crossing = profile.animate([
-    { transform: 'translate(155%, -14%) scale(.55) rotateY(0deg)', opacity: 1 },
-    { transform: 'translate(49%, -11%) scale(.58) rotateY(0deg)', opacity: 1, offset: .36 },
-    { transform: 'translate(23%, -8%) scale(.67) rotateY(31deg)', opacity: 1, offset: .52 },
-    { transform: 'translate(13%, -4%) scale(.77) rotateY(47deg)', opacity: 0, offset: .64 },
-    { transform: 'translate(13%, -4%) scale(.77) rotateY(47deg)', opacity: 0 },
+    { transform: 'translate(78%, -10%) scale(.58) rotateY(0deg)', opacity: 1 },
+    { transform: 'translate(37%, -9%) scale(.65) rotateY(0deg)', opacity: 1, offset: .36 },
+    { transform: 'translate(21%, -7%) scale(.72) rotateY(21deg)', opacity: 1, offset: .52 },
+    { transform: 'translate(12%, -4%) scale(.78) rotateY(35deg)', opacity: 0, offset: .64 },
+    { transform: 'translate(12%, -4%) scale(.78) rotateY(35deg)', opacity: 0 },
   ], timing);
   crossing.addEventListener('finish', () => profile.classList.remove('in-transit'));
   rollWheels(profile, [[0, 0], [650, .36], [815, .52], [950, .64], [950, 1]], timing);
@@ -141,13 +143,17 @@ function animateArrival(previous, next) {
     { transform: 'scaleX(.63) skewY(-8deg)', offset: .48 }, { transform: 'scaleX(1)', offset: .64 },
     { transform: 'scaleX(1)' },
   ], timing);
-  next.animate([
+  const arrival = next.animate([
     { transform: 'translate(39%, -12%) scale(.55) rotateY(25deg)', opacity: 0 },
     { transform: 'translate(23%, -8%) scale(.67) rotateY(22deg)', opacity: 0, offset: .48 },
     { transform: 'translate(13%, -4%) scale(.77) rotateY(11deg)', opacity: 1, offset: .64 },
     { transform: 'translate(-.4%, 0) scale(1.004) rotateY(0deg)', opacity: 1, offset: .93, easing: 'ease-out' },
     { transform: 'translate(0, 0) scale(1) rotateY(0deg)', opacity: 1 },
   ], timing);
+  activeArrival = arrival;
+  arrival.addEventListener('finish', () => {
+    if (activeArrival === arrival) hero.classList.remove('arriving');
+  });
   rollWheels(next, [[0, 0], [0, .48], [-330, .64], [-720, .93], [-720, 1]], timing);
   next.querySelector('.front-wheel').animate([
     { transform: 'scaleX(.72) skewY(5deg)' }, { transform: 'scaleX(.72) skewY(5deg)', offset: .55 },
@@ -180,7 +186,7 @@ function selectCar(index) {
   const car = cars[current];
 
   hero.style.setProperty('--garage-rgb', car.color);
-  animateArrival(previous, slides[current]);
+  animateArrival(previous, slides[current], { selected: true });
   slides.forEach((slide, i) => slide.classList.toggle('shown', i === current));
 
   dots.forEach((dot, i) => {
@@ -334,13 +340,12 @@ const intro = new IntersectionObserver(([entry]) => {
   if (!entry.isIntersecting || document.visibilityState !== 'visible') return;
   intro.disconnect();
   const initial = slides[0];
-  Promise.all([
+  Promise.allSettled([
     initial.querySelector('img[fetchpriority]').decode(),
     profiles[0].querySelector('img').decode(),
-    garageReady,
   ]).then(() => {
     if (!hasSelected && !initial.getAnimations().length) animateArrival(initial, initial);
-  }).catch(() => {});
+  });
 }, { threshold: .4 });
 
 function observeIntro() {

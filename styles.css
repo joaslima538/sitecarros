@@ -296,12 +296,19 @@ h2 em { color: var(--red); }
   .specs-stage { position: relative; height: auto; min-height: 75svh; }
 }
 
-.garage-canvas {
+.arrival-track {
   position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
+  inset: auto 0 0;
+  height: 2px;
+  background: #ffffff14;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity .2s;
 }
-.garage-3d .garage-stage { visibility: hidden; }
+.arriving .arrival-track { opacity: 1; }
+.arrival-progress {
+  height: 100%;
+  background: rgb(var(--garage-rgb));
+  transform: scaleX(0);
+  transform-origin: left;
+}

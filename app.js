@@ -35,17 +35,11 @@ const wheelPositions = [
   [[69.5, 69.4, 3.9, 14.6], [95.7, 49.3, 1.65, 11]],
   [[69, 71, 4.0, 15.8], [96.7, 48.9, 1.65, 12]],
 ];
-const sideWheels = [
-  [[22.1, 70.3, 5.8, 17.4], [79.5, 70.1, 5.8, 17.4]],
-  [[22.7, 72.5, 5.8, 17.4], [79.9, 72.9, 5.8, 17.4]],
-  [[23.8, 72.3, 5.8, 17.4], [81.7, 72.3, 5.8, 17.4]],
-];
-
 function addWheels(car, image, positions, aspect) {
   positions.forEach(([x, y, rx, ry], index) => {
     const mask = document.createElement('div');
     mask.className = 'garage-wheel';
-    if (index === (car.classList.contains('garage-profile-shell') ? 1 : 0)) mask.classList.add('front-wheel');
+    if (index === 0) mask.classList.add('front-wheel');
     mask.style.setProperty('--wheel-center', x + '% ' + y + '%');
     mask.style.setProperty('--wheel-radius', rx + '% ' + ry + '%');
     mask.style.setProperty('--wheel-perspective', rx * aspect / ry);
@@ -56,7 +50,7 @@ function addWheels(car, image, positions, aspect) {
   });
 }
 
-const profiles = slides.map((slide, index) => {
+slides.forEach((slide, index) => {
   const image = slide.querySelector('img');
   const reflection = image.cloneNode();
   reflection.className = 'garage-reflection';
@@ -65,18 +59,6 @@ const profiles = slides.map((slide, index) => {
 
   addWheels(slide, image, wheelPositions[index], 1536 / 895);
 
-  const profile = document.createElement('div');
-  profile.className = 'garage-car garage-profile';
-  const side = document.createElement('div');
-  side.className = 'garage-profile-shell';
-  const sideImage = new Image();
-  sideImage.src = 'assets/' + (index === 0 ? 'drive' : cars[index].asset + '-side') + '.webp';
-  sideImage.alt = '';
-  side.append(sideImage);
-  addWheels(side, sideImage, sideWheels[index], 3);
-  profile.append(side);
-  slide.before(profile);
-  return profile;
 });
 const garageLight = hero.querySelector('.garage-light');
 const backdrop = hero.querySelector('.garage-backdrop');
@@ -99,7 +81,7 @@ function rollWheels(car, frames, timing) {
 
 function animateArrival(previous, next, { selected = false } = {}) {
   const previousPose = getComputedStyle(previous).transform;
-  for (const slide of [...slides, ...profiles]) {
+  for (const slide of slides) {
     slide.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
     slide.classList.remove('in-transit');
   }
@@ -122,42 +104,34 @@ function animateArrival(previous, next, { selected = false } = {}) {
     exit.addEventListener('finish', () => previous.classList.remove('in-transit'));
   }
 
-  const delay = previous === next || gentle ? 0 : 220;
+  const delay = previous === next || gentle ? 0 : 280;
   const timing = { duration: gentle ? 950 : 3450, delay, fill: 'backwards' };
   arrivalBar.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], {
     ...timing, fill: 'both',
   });
-  const profile = profiles[slides.indexOf(next)];
-  profile.classList.add('in-transit');
-  const crossing = profile.animate([
-    { transform: 'translate(78%, -10%) scale(.58) rotateY(0deg)', opacity: 1 },
-    { transform: 'translate(37%, -9%) scale(.65) rotateY(0deg)', opacity: 1, offset: .36 },
-    { transform: 'translate(21%, -7%) scale(.72) rotateY(21deg)', opacity: 1, offset: .52 },
-    { transform: 'translate(12%, -4%) scale(.78) rotateY(35deg)', opacity: 0, offset: .64 },
-    { transform: 'translate(12%, -4%) scale(.78) rotateY(35deg)', opacity: 0 },
-  ], timing);
-  crossing.addEventListener('finish', () => profile.classList.remove('in-transit'));
-  rollWheels(profile, [[0, 0], [650, .36], [815, .52], [950, .64], [950, 1]], timing);
-  profile.querySelector('.front-wheel').animate([
-    { transform: 'scaleX(1)' }, { transform: 'scaleX(1)', offset: .29 },
-    { transform: 'scaleX(.63) skewY(-8deg)', offset: .48 }, { transform: 'scaleX(1)', offset: .64 },
-    { transform: 'scaleX(1)' },
-  ], timing);
-  const arrival = next.animate([
-    { transform: 'translate(39%, -12%) scale(.55) rotateY(25deg)', opacity: 0 },
-    { transform: 'translate(23%, -8%) scale(.67) rotateY(22deg)', opacity: 0, offset: .48 },
-    { transform: 'translate(13%, -4%) scale(.77) rotateY(11deg)', opacity: 1, offset: .64 },
-    { transform: 'translate(-.4%, 0) scale(1.004) rotateY(0deg)', opacity: 1, offset: .93, easing: 'ease-out' },
-    { transform: 'translate(0, 0) scale(1) rotateY(0deg)', opacity: 1 },
-  ], timing);
+  // Keep one body on screen so the lights, wheels and shadow follow the same pose.
+  const path = gentle ? [
+    { transform: 'translate(13%, -2%) scale(.94) rotateY(-8deg)' },
+    { transform: 'translate(0, 0) scale(1) rotateY(0deg)' },
+  ] : [
+    { transform: 'translate(94%, -9%) scale(.66) rotateY(-28deg)' },
+    { transform: 'translate(54%, -8%) scale(.71) rotateY(-26deg)', offset: .27 },
+    { transform: 'translate(24%, -5%) scale(.83) rotateY(-16deg)', offset: .55, easing: 'cubic-bezier(.18,.63,.38,1)' },
+    { transform: 'translate(0, 0) scale(1) rotateY(0deg)', offset: .92 },
+    { transform: 'translate(0, 0) scale(1) rotateY(0deg)' },
+  ];
+  const arrival = next.animate(path, timing);
   activeArrival = arrival;
   arrival.addEventListener('finish', () => {
     if (activeArrival === arrival) hero.classList.remove('arriving');
   });
-  rollWheels(next, [[0, 0], [0, .48], [-330, .64], [-720, .93], [-720, 1]], timing);
+  rollWheels(next, gentle
+    ? [[0, 0], [-105, .75], [-110, 1]]
+    : [[0, 0], [-300, .27], [-555, .55], [-720, .92], [-720, 1]], timing);
   next.querySelector('.front-wheel').animate([
-    { transform: 'scaleX(.72) skewY(5deg)' }, { transform: 'scaleX(.72) skewY(5deg)', offset: .55 },
-    { transform: 'scaleX(1)', offset: .91 }, { transform: 'scaleX(1)' },
+    { transform: 'scaleX(1)' }, { transform: 'scaleX(1)', offset: .22 },
+    { transform: 'scaleX(.77) skewY(5deg)', offset: .49 },
+    { transform: 'scaleX(1)', offset: .88 }, { transform: 'scaleX(1)' },
   ], timing);
   next.querySelector('.headlight').animate([
     { opacity: .3 }, { opacity: 1, offset: .28 }, { opacity: .67, offset: .74 }, { opacity: 0, offset: .91 }, { opacity: 0 },
@@ -340,12 +314,10 @@ const intro = new IntersectionObserver(([entry]) => {
   if (!entry.isIntersecting || document.visibilityState !== 'visible') return;
   intro.disconnect();
   const initial = slides[0];
-  Promise.allSettled([
-    initial.querySelector('img[fetchpriority]').decode(),
-    profiles[0].querySelector('img').decode(),
-  ]).then(() => {
-    if (!hasSelected && !initial.getAnimations().length) animateArrival(initial, initial);
-  });
+  const start = () => {
+    if (!hasSelected) animateArrival(initial, initial);
+  };
+  initial.querySelector('img[fetchpriority]').decode().then(start, start);
 }, { threshold: .4 });
 
 function observeIntro() {

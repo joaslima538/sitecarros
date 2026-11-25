@@ -218,8 +218,7 @@ h2 em { color: var(--red); }
   pointer-events: none;
 }
 .garage-stage { perspective: 1300px; }
-.garage-profile { padding-bottom: 1.2%; }
-.garage-profile-shell { transform: scaleX(-1); }
+.garage-car { transform-origin: 70% 93%; }
 .garage-wheel { transform-origin: var(--wheel-center); }
 .garage-car::before {
   bottom: 1%;
@@ -227,7 +226,6 @@ h2 em { color: var(--red); }
   background: radial-gradient(ellipse, #010102 8%, #040407d4 34%, transparent 72%);
   filter: blur(6px);
 }
-.garage-profile::before { bottom: -.6%; }
 .scene-controls .replay { white-space: nowrap; }
 
 .specs {

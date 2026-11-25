@@ -25,11 +25,11 @@
         <div class="garage-light"></div>
         <div class="garage-lane"></div>
         <div class="garage-beam"></div>
-        <div class="garage-stage">
+        <div class="garage-stage"><div class="camera-rig">
           <div class="garage-car shown"><img src="assets/gtr-front.webp" alt="" fetchpriority="high"><span class="headlight"></span></div>
           <div class="garage-car"><img src="assets/supra-front.webp" alt=""><span class="headlight"></span></div>
           <div class="garage-car"><img src="assets/rx7-front.webp" alt=""><span class="headlight"></span></div>
-        </div>
+        </div></div>
       </div>
       <div class="hero-shade"></div>
       <div class="hero-content shell">
@@ -39,6 +39,10 @@
           <p id="hero-description" class="description">O monstro de Yokohama. Um V6 biturbo, tração integral e presença suficiente para dominar qualquer rua.</p>
         </div>
         <a class="button" id="hero-link" href="#ficha">Conhecer o carro <span aria-hidden="true">↗</span></a>
+        <div class="camera-control">
+          <label for="camera-angle">Ângulo da câmera</label>
+          <input id="camera-angle" type="range" min="-28" max="28" value="0">
+        </div>
       </div>
       <div class="hero-bottom shell">
         <div class="pagination" aria-label="Escolher carro">
@@ -68,7 +72,8 @@
               <div><dt>Código</dt><dd id="spec-code">VR38DETT</dd></div>
             </dl>
             <div class="specs-vehicle">
-              <img id="spec-image" src="assets/gtr-top.webp" alt="Nissan GT-R R35 visto de cima">
+              <img id="spec-approach" class="spec-approach" src="assets/gtr-front.webp" alt="" aria-hidden="true">
+              <img id="spec-image" class="spec-overhead" src="assets/gtr-top.webp" alt="Nissan GT-R R35 visto de cima">
             </div>
             <dl class="specs-data specs-right">
               <div><dt>Tração</dt><dd id="spec-drive">Integral</dd></div>

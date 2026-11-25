@@ -65,6 +65,13 @@ const backdrop = hero.querySelector('.garage-backdrop');
 const beam = hero.querySelector('.garage-beam');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const dots = [...hero.querySelectorAll('.pagination button')];
+const cameraAngle = document.querySelector('#camera-angle');
+function updateCamera() {
+  const degrees = cameraAngle.valueAsNumber;
+  hero.style.setProperty('--camera-yaw', degrees + 'deg');
+  hero.style.setProperty('--camera-pan', degrees * -.6 + 'px');
+}
+cameraAngle.addEventListener('input', updateCamera);
 let current = 0;
 let hasSelected = false;
 let activeArrival;
@@ -160,6 +167,8 @@ function selectCar(index) {
   const car = cars[current];
 
   hero.style.setProperty('--garage-rgb', car.color);
+  cameraAngle.value = '0';
+  updateCamera();
   animateArrival(previous, slides[current], { selected: true });
   slides.forEach((slide, i) => slide.classList.toggle('shown', i === current));
 
@@ -195,6 +204,7 @@ document.querySelectorAll('[data-car]').forEach(card => {
 });
 
 hero.addEventListener('keydown', event => {
+  if (event.target === cameraAngle) return;
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault();
     selectCar(current + (event.key === 'ArrowLeft' ? -1 : 1));
@@ -258,6 +268,7 @@ stage.addEventListener('wheel', event => {
 const specs = document.querySelector('.specs');
 const specsTitle = document.querySelector('#specs-title');
 const specsImage = document.querySelector('#spec-image');
+const specsApproach = document.querySelector('#spec-approach');
 
 function updateSpecs(car) {
   specs.style.setProperty('--garage-rgb', car.color);
@@ -265,6 +276,7 @@ function updateSpecs(car) {
   model.textContent = car.model;
   specsTitle.replaceChildren(car.make + ' ', model);
   specsImage.src = 'assets/' + car.asset + '-top.webp';
+  specsApproach.src = 'assets/' + car.asset + '-front.webp';
   specsImage.alt = car.make + ' ' + car.model + ' visto de cima';
   for (const [field, value] of Object.entries(car.specs)) {
     document.querySelector('#spec-' + field).textContent = value;
@@ -283,7 +295,10 @@ function renderScroll() {
   const scene = experience.getBoundingClientRect();
   const details = specs.getBoundingClientRect();
   const reveal = Math.min(1, Math.max(0, (innerHeight * .74 - details.top) / (innerHeight * .9)));
-  specs.style.setProperty('--spec-progress', reducedMotion.matches ? 1 : reveal);
+  const lift = reducedMotion.matches ? 1 : reveal * reveal * (3 - 2 * reveal);
+  const overhead = Math.min(1, Math.max(0, (lift - .17) / .65));
+  specs.style.setProperty('--spec-progress', lift);
+  specs.style.setProperty('--overhead', overhead);
   const active = navSections.findLastIndex(section => section.getBoundingClientRect().top <= innerHeight * 0.35);
   navLinks.forEach((link, index) => link.classList.toggle('active', index === active));
 

@@ -310,3 +310,60 @@ h2 em { color: var(--red); }
   transform: scaleX(0);
   transform-origin: left;
 }
+
+.camera-rig {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(var(--camera-yaw, 0deg)) translateX(var(--camera-pan, 0px));
+  transition: transform .18s ease-out;
+}
+.camera-control {
+  display: grid;
+  gap: 6px;
+  width: min(190px, 100%);
+  margin-top: 18px;
+  pointer-events: auto;
+}
+.camera-control label { text-transform: uppercase; color: #ded9df; font-size: 10px; letter-spacing: .1em; }
+.camera-control input { width: 100%; margin: 0; min-height: 22px; accent-color: rgb(var(--garage-rgb)); cursor: ew-resize; }
+.camera-control input:focus-visible { outline: 1px solid white; outline-offset: 4px; }
+.garage-backdrop {
+  background: linear-gradient(180deg, #080a10 0%, #10141b30 52%, #0a0a11a8 100%), url("assets/garage.webp") center 62% / cover;
+  transform: translateX(calc(var(--camera-pan, 0px) * -.45)) scale(1.025);
+}
+.hero .garage-light {
+  background:
+    radial-gradient(ellipse at 54% 49%, rgba(var(--garage-rgb), .24), transparent 61%),
+    radial-gradient(ellipse at 58% 77%, rgba(var(--garage-rgb), .31), transparent 37%);
+}
+.garage-lane { opacity: .55; }
+
+.specs { --overhead: 1; }
+.specs-title { opacity: clamp(.25, calc(var(--spec-progress) * 1.45), 1); }
+.specs-vehicle {
+  opacity: 1;
+  transform: none;
+  perspective: 660px;
+}
+.specs-vehicle::before { opacity: var(--overhead); transform: rotate(calc((1 - var(--overhead)) * -39deg)); }
+.specs-vehicle .spec-overhead {
+  opacity: var(--overhead);
+  transform: rotate(calc((1 - var(--overhead)) * -36deg)) scale(calc(.68 + var(--overhead) * .32));
+}
+.specs-vehicle .spec-approach {
+  position: absolute;
+  width: 157%;
+  max-width: none;
+  opacity: calc(1 - var(--overhead));
+  transform: translateY(calc(9% - var(--spec-progress) * 40%))
+    rotateZ(calc(var(--spec-progress) * -32deg))
+    rotateX(calc(var(--spec-progress) * 44deg))
+    scale(calc(.9 - var(--spec-progress) * .27));
+}
+.specs-data { opacity: clamp(0, calc(var(--overhead) * 1.65 - .3), 1); }
+
+@media (max-width: 540px) {
+  .camera-control { margin-top: 14px; width: 125px; }
+  .camera-control label { font-size: 8px; }
+  .specs-vehicle .spec-approach { width: 200%; }
+}

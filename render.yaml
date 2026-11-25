@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: overdrive-sitecarros
+    runtime: static
+    branch: deploy/render
+    buildCommand: mkdir -p dist && cp -R index.html styles.css app.js garage-3d.js assets dist/
+    staticPublishPath: ./dist

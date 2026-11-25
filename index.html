@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="description" content="Overdrive é uma vitrine da cultura JDM. Explore três lendas japonesas e acelere pela noite.">
+  <title>OVERDRIVE® — Cultura JDM</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="header shell">
+    <a class="logo" href="#inicio" aria-label="Overdrive, início"><i aria-hidden="true"></i>OVERDRIVE<sup>®</sup></a>
+    <nav aria-label="Navegação principal">
+      <a class="active" href="#inicio">Início</a><a href="#garagem">Garagem</a><a href="#experiencia">Experiência</a>
+    </nav>
+    <a class="header-cta" href="#garagem">Explorar garagem <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero" aria-label="Carrossel de carros em destaque" aria-roledescription="carrossel">
+      <div class="hero-media" aria-hidden="true">
+        <div class="garage-backdrop"></div>
+        <div class="garage-light"></div>
+        <div class="garage-lane"></div>
+        <div class="garage-beam"></div>
+        <div class="garage-stage">
+          <div class="garage-car shown"><img src="assets/gtr-front.webp" alt="" fetchpriority="high"><span class="headlight"></span></div>
+          <div class="garage-car"><img src="assets/supra-front.webp" alt=""><span class="headlight"></span></div>
+          <div class="garage-car"><img src="assets/rx7-front.webp" alt=""><span class="headlight"></span></div>
+        </div>
+      </div>
+      <div class="hero-shade"></div>
+      <div class="hero-content shell">
+        <div class="hero-copy" aria-live="polite">
+          <p class="eyebrow"><span></span> CULTURA JDM <b>//</b> <span id="hero-tag">GODZILLA</span></p>
+          <h1><span id="hero-make">NISSAN</span><strong id="hero-model">GT-R R35</strong></h1>
+          <p id="hero-description" class="description">O monstro de Yokohama. Um V6 biturbo, tração integral e presença suficiente para dominar qualquer rua.</p>
+        </div>
+        <a class="button" id="hero-link" href="#ficha">Conhecer o carro <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-bottom shell">
+        <div class="pagination" aria-label="Escolher carro">
+          <button class="selected" aria-current="true"><img src="assets/gtr.webp" alt=""><span><small>01</small> GT-R R35</span></button>
+          <button><img src="assets/supra.webp" alt=""><span><small>02</small> SUPRA MK4</span></button>
+          <button><img src="assets/rx7.webp" alt=""><span><small>03</small> RX-7 FD</span></button>
+        </div>
+        <div class="scene-controls">
+          <a class="replay" href="#ficha">↓ Ver ficha técnica</a>
+          <p class="drag-label"><span aria-hidden="true">↔</span> ARRASTE PARA TROCAR</p>
+        </div>
+        <div class="arrows"><button id="previous" aria-label="Carro anterior">←</button><button id="next" aria-label="Próximo carro">→</button></div>
+      </div>
+    </section>
+
+    <section id="ficha" class="specs" aria-labelledby="specs-title">
+      <div class="specs-stage">
+        <div class="specs-shell shell">
+          <header class="specs-title">
+            <p class="eyebrow"><span></span> FICHA TÉCNICA</p>
+            <h2 id="specs-title">NISSAN <em>GT-R R35</em></h2>
+          </header>
+          <div class="specs-grid">
+            <dl class="specs-data specs-left">
+              <div><dt>Motor</dt><dd id="spec-engine">3.8 V6 biturbo</dd></div>
+              <div><dt>Código</dt><dd id="spec-code">VR38DETT</dd></div>
+            </dl>
+            <div class="specs-vehicle">
+              <img id="spec-image" src="assets/gtr-top.webp" alt="Nissan GT-R R35 visto de cima">
+            </div>
+            <dl class="specs-data specs-right">
+              <div><dt>Tração</dt><dd id="spec-drive">Integral</dd></div>
+              <div><dt>Origem</dt><dd id="spec-origin">Yokohama</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div class="ticker-track">
+      <span>BUILT TO BREAK LIMITS <b>✦</b> JDM CULTURE <b>✦</b> TOKYO AFTER DARK <b>✦</b> STREET LEGENDS <b>✦</b></span>
+      <span>BUILT TO BREAK LIMITS <b>✦</b> JDM CULTURE <b>✦</b> TOKYO AFTER DARK <b>✦</b> STREET LEGENDS <b>✦</b></span>
+    </div></div>
+
+    <section id="garagem" class="garage shell">
+      <div class="section-heading">
+        <div><p class="eyebrow"><span></span> A COLEÇÃO</p><h2>LENDAS <em>DA RUA.</em></h2></div>
+        <p>Três ícones japoneses que fizeram história nas pistas e nas ruas.</p>
+      </div>
+      <div class="cards">
+        <a id="nissan" class="card" data-car="0" href="#inicio"><img src="assets/gtr.webp" alt="Nissan GT-R prata em garagem iluminada em vermelho" loading="lazy"><div class="card-caption"><div><p>NISSAN</p><h3>GT-R R35</h3></div><span aria-hidden="true">↗</span></div></a>
+        <a id="toyota" class="card" data-car="1" href="#inicio"><img src="assets/supra.webp" alt="Toyota Supra laranja em garagem industrial" loading="lazy"><div class="card-caption"><div><p>TOYOTA</p><h3>SUPRA MK4</h3></div><span aria-hidden="true">↗</span></div></a>
+        <a id="mazda" class="card" data-car="2" href="#inicio"><img src="assets/rx7.webp" alt="Mazda RX-7 azul sob luzes fluorescentes" loading="lazy"><div class="card-caption"><div><p>MAZDA</p><h3>RX-7 FD</h3></div><span aria-hidden="true">↗</span></div></a>
+      </div>
+    </section>
+
+    <section id="experiencia" class="experience" aria-labelledby="drive-title">
+      <div class="drive">
+        <div class="speed-lines" aria-hidden="true"></div>
+        <div class="drive-copy shell">
+          <p class="eyebrow"><span></span> EXPERIÊNCIA INTERATIVA</p>
+          <h2 id="drive-title">PISE <em>FUNDO.</em></h2>
+          <p class="drive-instruction">Role para acelerar.</p>
+        </div>
+        <div class="road" aria-hidden="true"></div>
+        <img class="drive-car" src="assets/drive.webp" alt="" loading="lazy">
+        <div class="speed shell" aria-hidden="true"><div><strong id="speed">000</strong><span> KM/H</span></div><div class="speed-track"><span></span></div></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer shell"><a class="logo" href="#inicio"><i aria-hidden="true"></i>OVERDRIVE<sup>®</sup></a><a href="#inicio">Voltar ao topo ↑</a></footer>
+</body>
+</html>

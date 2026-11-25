@@ -25,11 +25,11 @@
         <div class="garage-light"></div>
         <div class="garage-lane"></div>
         <div class="garage-beam"></div>
-        <div class="garage-stage"><div class="camera-rig">
+        <div class="garage-stage">
           <div class="garage-car shown"><img src="assets/gtr-front.webp" alt="" fetchpriority="high"><span class="headlight"></span></div>
           <div class="garage-car"><img src="assets/supra-front.webp" alt=""><span class="headlight"></span></div>
           <div class="garage-car"><img src="assets/rx7-front.webp" alt=""><span class="headlight"></span></div>
-        </div></div>
+        </div>
       </div>
       <div class="hero-shade"></div>
       <div class="hero-content shell">
@@ -39,9 +39,9 @@
           <p id="hero-description" class="description">O monstro de Yokohama. Um V6 biturbo, tração integral e presença suficiente para dominar qualquer rua.</p>
         </div>
         <a class="button" id="hero-link" href="#ficha">Conhecer o carro <span aria-hidden="true">↗</span></a>
-        <div class="camera-control">
-          <label for="camera-angle">Ângulo da câmera</label>
-          <input id="camera-angle" type="range" min="-28" max="28" value="0">
+        <div class="view-controls" role="group" aria-label="Vista do carro">
+          <button type="button" data-view="front" aria-pressed="true">Frente</button>
+          <button type="button" data-view="side" aria-pressed="false">Perfil</button>
         </div>
       </div>
       <div class="hero-bottom shell">

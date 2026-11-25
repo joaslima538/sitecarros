@@ -58,6 +58,11 @@ slides.forEach((slide, index) => {
   slide.prepend(reflection);
 
   addWheels(slide, image, wheelPositions[index], 1536 / 895);
+  const profile = new Image();
+  profile.className = 'car-profile';
+  profile.alt = '';
+  profile.src = index === 0 ? 'assets/drive.webp' : 'assets/' + cars[index].asset + '-side.webp';
+  slide.append(profile);
 
 });
 const garageLight = hero.querySelector('.garage-light');
@@ -65,13 +70,14 @@ const backdrop = hero.querySelector('.garage-backdrop');
 const beam = hero.querySelector('.garage-beam');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const dots = [...hero.querySelectorAll('.pagination button')];
-const cameraAngle = document.querySelector('#camera-angle');
-function updateCamera() {
-  const degrees = cameraAngle.valueAsNumber;
-  hero.style.setProperty('--camera-yaw', degrees + 'deg');
-  hero.style.setProperty('--camera-pan', degrees * -.6 + 'px');
+const viewButtons = [...hero.querySelectorAll('[data-view]')];
+function chooseView(view) {
+  hero.dataset.view = view;
+  viewButtons.forEach(button => {
+    button.setAttribute('aria-pressed', String(button.dataset.view === view));
+  });
 }
-cameraAngle.addEventListener('input', updateCamera);
+viewButtons.forEach(button => button.addEventListener('click', () => chooseView(button.dataset.view)));
 let current = 0;
 let hasSelected = false;
 let activeArrival;
@@ -118,14 +124,14 @@ function animateArrival(previous, next, { selected = false } = {}) {
   });
   // Keep one body on screen so the lights, wheels and shadow follow the same pose.
   const path = gentle ? [
-    { transform: 'translate(13%, -2%) scale(.94) rotateY(-8deg)' },
-    { transform: 'translate(0, 0) scale(1) rotateY(0deg)' },
+    { transform: 'translate(13%, -2%) scale(.94)' },
+    { transform: 'translate(0, 0) scale(1)' },
   ] : [
-    { transform: 'translate(94%, -9%) scale(.66) rotateY(-28deg)' },
-    { transform: 'translate(54%, -8%) scale(.71) rotateY(-26deg)', offset: .27 },
-    { transform: 'translate(24%, -5%) scale(.83) rotateY(-16deg)', offset: .55, easing: 'cubic-bezier(.18,.63,.38,1)' },
-    { transform: 'translate(0, 0) scale(1) rotateY(0deg)', offset: .92 },
-    { transform: 'translate(0, 0) scale(1) rotateY(0deg)' },
+    { transform: 'translate(94%, -9%) scale(.66)' },
+    { transform: 'translate(54%, -8%) scale(.71)', offset: .27 },
+    { transform: 'translate(24%, -5%) scale(.83)', offset: .55, easing: 'cubic-bezier(.18,.63,.38,1)' },
+    { transform: 'translate(0, 0) scale(1)', offset: .92 },
+    { transform: 'translate(0, 0) scale(1)' },
   ];
   const arrival = next.animate(path, timing);
   activeArrival = arrival;
@@ -167,8 +173,7 @@ function selectCar(index) {
   const car = cars[current];
 
   hero.style.setProperty('--garage-rgb', car.color);
-  cameraAngle.value = '0';
-  updateCamera();
+  chooseView('front');
   animateArrival(previous, slides[current], { selected: true });
   slides.forEach((slide, i) => slide.classList.toggle('shown', i === current));
 
@@ -204,7 +209,6 @@ document.querySelectorAll('[data-car]').forEach(card => {
 });
 
 hero.addEventListener('keydown', event => {
-  if (event.target === cameraAngle) return;
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault();
     selectCar(current + (event.key === 'ArrowLeft' ? -1 : 1));
